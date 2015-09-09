@@ -1,6 +1,6 @@
 class UserInfo
-  attr_accessor :first_name,
-                :last_name,
+  attr_accessor :name,
+                :role,
                 :phone_number,
                 :address,
                 :github_account,
