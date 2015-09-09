@@ -30,7 +30,6 @@ class UserManager
       user = Student.new
       user.name = @user_name
       user.role = "Student"
-      puts "---"
       puts "Enter #{user.name}'s Cohort:"
       user.cohort = gets.chomp
       puts "#{user.name}'s belongs to TIY #{user.cohort} Cohort."
@@ -68,11 +67,8 @@ class UserManager
       users << user
     elsif role == "e"
       user = Employee.new
+      user.name = @user_name
       user.role = "Employee"
-      puts "Enter New Employee's Name:"
-      user.name = gets.chomp
-      puts "#{user.name} added."
-      puts "---"
       puts "Enter #{user.name}'s Salary:"
       user.salary = gets.chomp
       puts "#{user.name}'s Salary is: #{user.salary}."
