@@ -1,39 +1,32 @@
-class UserInfo
-  attr_accessor :name,
-                :role,
-                :phone_number,
-                :address,
-                :github_account,
-                :slack_account
-end
+require 'date'
 
-class Student < UserInfo
-  attr_accessor :cohort,
-                :graduated
-end
+require_relative 'userinfo'
+require_relative 'student'
+require_relative 'phone_number_parser'
+require_relative 'employee'
 
-class Employee < UserInfo
-  attr_accessor :salary,
-                :position,
-                :date_hired
-end
-
-class UserManager
-  def initialize(name)
-    @user_name = name
+class Database
+  def initialize
+    @users = []
   end
 
-  def extract_phone_number(input)
-    if input.gsub(/\D/, "").match(/^1?(\d{3})(\d{3})(\d{4})/)
-      [$1, $2, $3].join("-")
+  def search_user(name)
+    @users.each do |user|
+      if users.name == name
+        puts "Found User #{users.name}"
+        if users.role == "Student"
+          # print out their attributes
+        elsif users.role == "Employee"
+          # print out their attributes
+        end
+        return
+      end
     end
+
+    puts "#{name} not found."
   end
 
-  def search_user
-
-  end
-
-  def delete_user
+  def delete_user(name)
     users.each do |user|
       if user == user.name
         puts "!!! REMOVING #{user.name} from the Database !!!"
@@ -44,14 +37,12 @@ class UserManager
     end
   end
 
-  def add_user
-    users = Array.new # Whats the best way to initialize my Array?
+  def add_user(name)
     puts "Adding New (S)tudent or (E)mployee User?"
     role = gets.chomp.downcase
     if role == "s"
       user = Student.new
-      user.name = @user_name
-      user.role = "Student"
+      user.name = name
       puts "Enter #{user.name}'s Cohort:"
       user.cohort = gets.chomp
       puts "#{user.name}'s belongs to TIY #{user.cohort} Cohort."
@@ -69,8 +60,7 @@ class UserManager
       puts "---"
       puts "Enter #{user.name}'s Phone Number, starting with Area Code:"
       raw_number = gets.chomp
-      extracted_number = extract_phone_number(raw_number)
-      user.phone_number = extracted_number
+      user.phone_number = PhoneNumberParser.new(raw_number).formatted
       puts "#{user.name}'s phone number is #{user.phone_number}."
       puts "---"
       puts "Enter #{user.name}'s Address:"
@@ -89,20 +79,18 @@ class UserManager
       users << user
     elsif role == "e"
       user = Employee.new
-      user.name = @user_name
-      user.role = "Employee"
+      user.name = name
       puts "Enter #{user.name}'s Salary:"
       user.salary = gets.chomp
       puts "#{user.name}'s Salary is: #{user.salary}."
       puts "---"
-      puts "Enter the Year #{user.name} was hired:"
+      puts "Enter the Date #{user.name} was hired (MM-DD-YYYY):"
       user.date_hired = gets.chomp
-      puts "#{user.name} was hired in #{user.date_hired}"
+      puts "#{user.name} was hired on #{user.date_hired}"
       puts "---"
       puts "Enter #{user.name}'s Phone Number, starting with Area Code:"
       raw_number = gets.chomp
-      extracted_number = extract_phone_number(raw_number)
-      user.phone_number = extracted_number
+      user.phone_number = PhoneNumberParser.new(raw_number).formatted
       puts "#{user.name}'s phone number is #{user.phone_number}."
       puts "---"
       puts "Enter #{user.name}'s Address:"
@@ -118,40 +106,41 @@ class UserManager
       puts "#{user.name}'s Slack Username is #{user.slack_account}."
       puts "---"
       puts "<<< SAVING #{user.name}'s Profile to the Database >>>"
-      users << user
+      @users << user
     else
       puts "That action is invalid! Please enter a valid action."
     end
-    p users.inspect
+    p @users
   end
 end
 
+database = Database.new
 puts "Welcome to the Iron Yard User Database!"
+
+# some kind of loop starting here
 puts "Select from the following actions:"
 puts "(A)dd User, (S)earch User, (D)elete User, (Q)uit."
 action = gets.chomp.downcase
 if action == "a"
   puts "+++ ADD USER +++"
   puts "Enter New User's Name:"
-  name = gets.chomp
+  name = gets.chomp.capitalize
+  database.add_user(name)
   puts "#{name} added."
-  user = UserManager.new(name)
-  user.add_user
 elsif action == "s"
   puts ">>> SEARCH USERS <<<"
   name = gets.chomp
   puts "Searching for #{name}..."
-  user = UserManager.new(name)
-  user.search_user
+  user.search_user(name)
 elsif action == "d"
   puts "--- DELETE USER ---"
   puts "Enter User's Name you want REMOVED from Database:"
   name = gets.chomp
-  user = UserManager.new(name)
-  user.delete_user
+  user.delete_user(name)
 elsif action == "q"
   puts "~~~ EXITING ~~~"
   exit
 else
   puts "That action is invalid! Please enter a valid action."
 end
+# loop ends here
