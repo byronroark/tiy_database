@@ -23,7 +23,29 @@ class UserManager
     @user_name = name
   end
 
+  def extract_phone_number(input)
+    if input.gsub(/\D/, "").match(/^1?(\d{3})(\d{3})(\d{4})/)
+      [$1, $2, $3].join("-")
+    end
+  end
+
+  def search_user
+
+  end
+
+  def delete_user
+    users.each do |user|
+      if user == user.name
+        puts "!!! REMOVING #{user.name} from the Database !!!"
+        users -= [user]
+      else
+        puts "#{user.name} not found."
+      end
+    end
+  end
+
   def add_user
+    users = Array.new # Whats the best way to initialize my Array?
     puts "Adding New (S)tudent or (E)mployee User?"
     role = gets.chomp.downcase
     if role == "s"
@@ -104,46 +126,29 @@ class UserManager
   end
 end
 
-def extract_phone_number(input)
-  if input.gsub(/\D/, "").match(/^1?(\d{3})(\d{3})(\d{4})/)
-    [$1, $2, $3].join("-")
-  end
-end
-
-# def search_user
-# end
-#
-def delete_user
-  puts "Enter User to be Removed:"
-  user_marked_for_death = gets.chomp
-  users.each do |user|
-    if user_marked_for_death == user.name
-      puts "!!! REMOVING #{user.name} from the Database !!!"
-      users -= [user]
-    else
-      puts "#{user.name} not found."
-    end
-  end
-end
-
 puts "Welcome to the Iron Yard User Database!"
 puts "Select from the following actions:"
 puts "(A)dd User, (S)earch User, (D)elete User, (Q)uit."
 action = gets.chomp.downcase
 if action == "a"
   puts "+++ ADD USER +++"
-  users = Array.new
   puts "Enter New User's Name:"
   name = gets.chomp
   puts "#{name} added."
-  new_user = UserManager.new(name)
-  new_user.add_user
+  user = UserManager.new(name)
+  user.add_user
 elsif action == "s"
   puts ">>> SEARCH USERS <<<"
-  search_user
+  name = gets.chomp
+  puts "Searching for #{name}..."
+  user = UserManager.new(name)
+  user.search_user
 elsif action == "d"
   puts "--- DELETE USER ---"
-  delete_user
+  puts "Enter User's Name you want REMOVED from Database:"
+  name = gets.chomp
+  user = UserManager.new(name)
+  user.delete_user
 elsif action == "q"
   puts "~~~ EXITING ~~~"
   exit
