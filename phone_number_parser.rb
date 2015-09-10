@@ -1,11 +1,5 @@
 class PhoneNumberParser
-  attr_reader :raw_phone_number
-
-  def initialize(raw_phone_number)
-    @raw_phone_number = raw_phone_number
-  end
-
-  def formatted
+  def self.formatted(raw_phone_number)
     if raw_phone_number.gsub(/\D/, "").match(/^1?(\d{3})(\d{3})(\d{4})/)
       [$1, $2, $3].join("-")
     end
