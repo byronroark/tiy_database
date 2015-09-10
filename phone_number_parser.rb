@@ -6,7 +6,7 @@ class PhoneNumberParser
   end
 
   def formatted
-    if input.gsub(/\D/, "").match(/^1?(\d{3})(\d{3})(\d{4})/)
+    if raw_phone_number.gsub(/\D/, "").match(/^1?(\d{3})(\d{3})(\d{4})/)
       [$1, $2, $3].join("-")
     end
   end
