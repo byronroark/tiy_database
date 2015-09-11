@@ -154,7 +154,7 @@ loop do
   if action == "a"
     puts "+++ ADD USER +++"
     name = database.prompt("Enter New User's Name:").downcase
-    if database.find(name)
+    if database.find_user_by_name(name)
       puts "User already exists!"
     else
       database.add_user(name)
