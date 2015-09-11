@@ -7,22 +7,36 @@ require_relative 'employee'
 
 class Database
   def initialize
-    toni = Student.new
-    toni.name = "Toni"
+    byron = Student.new
+    byron.name = "byron"
+    byron.cohort = "Fall 2015"
+    byron.graduated = "no"
+    byron.phone_number = "352-281-7726"
+    byron.address = "410 S Armenia Ave"
+    byron.github_account = "byronroark"
+    byron.slack_account = "byronroark"
+
+    sanam = Student.new
+    sanam.name = "sanam"
 
     gavin = Employee.new
-    gavin.name = "Gavin"
+    gavin.name = "gavin"
 
     jason = Employee.new
-    jason.name = "Jason"
+    jason.name = "jason"
 
-    @users = [toni, gavin, jason]
+    @users = [byron, sanam, gavin, jason]
+    # @users = []
   end
 
   def search_user(name)
-    user = @users.find { |user| user.name.include?(name) }
-    if user
-      puts ">>> #{user.name} found! <<<"
+    user = @users.find { |user| /#{name}/ =~ user.name }
+    if user.is_a?(Student)
+      puts "Name: #{user.name.capitalize}\nRole: #{Student}\nCohort: #{user.cohort}\nGraduated?: #{user.graduated}\nPhone: #{user.phone_number}\nAddress: #{user.address}\nGithub: #{user.github_account}\nSlack: #{user.slack_account}"
+      puts "---"
+    elsif user.is_a?(Employee)
+      puts "Name: #{user.name.capitalize}\nRole: #{Employee}\nPosition: #{user.position}\nSalary: #{user.salary}\nPhone: #{user.phone_number}\nAddress: #{user.address}\nGithub: #{user.github_account}\nSlack: #{user.slack_account}"
+      puts "---"
     else
       puts "No match found for #{name}."
     end
@@ -30,9 +44,8 @@ class Database
 
   def delete_user(name)
     user = @users.find { |user| user.name.include?(name) }
-    # @users.delete_if { |user| user.name == name }
     if user
-      puts "!!! REMOVED #{user.name} from the Database !!!"
+      puts "!!! REMOVED #{user.name.capitalize} from the Database !!!"
       @users.delete(user)
     else
       puts "#{name} not found."
@@ -41,16 +54,16 @@ class Database
 
   def prompt(message)
     puts message
-    gets.chomp
+    gets.chomp.downcase
   end
 
   def get_student_info(name)
     user = Student.new
     user.name = name
-    user.cohort = prompt("Enter #{user.name}'s Cohort:")
-    puts "#{user.name}'s belongs to TIY #{user.cohort} Cohort."
+    user.cohort = prompt("Enter #{user.name.capitalize}'s Cohort:")
+    puts "#{user.name.capitalize}'s belongs to TIY #{user.cohort} Cohort."
     puts "---"
-    graduated = prompt("Has #{user.name} Graduated? (Y)es or (N)ot yet").downcase
+    graduated = prompt("Has #{user.name.capitalize} Graduated? (Y)es or (N)ot yet").downcase
     if graduated == "y"
       user.graduated = "yes"
     elsif graduated == "n"
@@ -58,48 +71,60 @@ class Database
     else
       puts "Invalid choice. Please enter (y)es or (n)o"
     end
-    puts "#{user.name}'s graduation status added."
+    puts "#{user.name.capitalize}'s graduation status added."
     puts "---"
-    raw_number = prompt("Enter #{user.name}'s Phone Number, starting with Area Code:")
+    raw_number = prompt("Enter #{user.name.capitalize}'s Phone Number, starting with Area Code:")
     user.phone_number = PhoneNumberParser.formatted(raw_number)
-    puts "#{user.name}'s phone number is #{user.phone_number}."
+    puts "#{user.name.capitalize}'s phone number is #{user.phone_number}."
     puts "---"
-    user.address = prompt("Enter #{user.name}'s Address:")
-    puts "#{user.name}'s address is #{user.address}."
+    user.address = prompt("Enter #{user.name.capitalize}'s Address:")
+    puts "#{user.name.capitalize}'s address is #{user.address}."
     puts "---"
-    user.github_account = prompt("Enter #{user.name}'s GitHub Username:")
-    puts "#{user.name}'s GitHub Username is #{user.github_account}."
+    user.github_account = prompt("Enter #{user.name.capitalize}'s GitHub Username:")
+    puts "#{user.name.capitalize}'s GitHub Username is #{user.github_account}."
     puts "---"
-    user.slack_account = prompt("Enter #{user.name}'s Slack Username:")
-    puts "#{user.name}'s Slack Username is #{user.slack_account}."
+    user.slack_account = prompt("Enter #{user.name.capitalize}'s Slack Username:")
+    puts "#{user.name.capitalize}'s Slack Username is #{user.slack_account}."
     puts "---"
-    puts "<<< SAVING #{user.name}'s Profile to the Database >>>"
+    puts "<<< SAVING #{user.name.capitalize}'s Profile to the Database >>>"
     return user
   end
 
   def get_employee_info(name)
     user = Employee.new
     user.name = name
-    user.salary = prompt("Enter #{user.name}'s Salary:")
-    puts "#{user.name}'s Salary is: #{user.salary}."
+    position = prompt("Select #{user.name.capitalize}'s Position at Iron Yard:\n(D)irector, (R)ails Instructor, or (F)ront-end Instructor").downcase
+    if position == "d"
+      user.position = "Director"
+    elsif position == "r"
+      user.position = "Rails Instructor"
+    elsif position == "f"
+      user.position = "Front-end Instructor"
+    else
+      puts "Invalid selection. Please select one of the valid options."
+    end
+    puts "#{user.name.capitalize} is the #{user.position} of Iron Yard Tampa."
     puts "---"
-    user.date_hired = prompt("Enter the Date #{user.name} was hired (MM-DD-YYYY):")
-    puts "#{user.name} was hired on #{user.date_hired}"
+    user.salary = prompt("Enter #{user.name.capitalize}'s Salary:")
+    puts "#{user.name.capitalize}'s Salary is: #{user.salary}."
     puts "---"
-    raw_number = prompt("Enter #{user.name}'s Phone Number, starting with Area Code:")
+    user.date_hired = prompt("Enter the Date that #{user.name.capitalize} was hired (MM-DD-YYYY):")
+    puts "#{user.name.capitalize} was hired on #{user.date_hired}."
+    puts "---"
+    raw_number = prompt("Enter #{user.name.capitalize}'s Phone Number, starting with Area Code:")
     user.phone_number = PhoneNumberParser.formatted(raw_number)
-    puts "#{user.name}'s phone number is #{user.phone_number}."
+    puts "#{user.name.capitalize}'s phone number is #{user.phone_number}."
     puts "---"
-    user.address = prompt("Enter #{user.name}'s Address:")
-    puts "#{user.name}'s address is #{user.address}."
+    user.address = prompt("Enter #{user.name.capitalize}'s Address:")
+    puts "#{user.name.capitalize}'s address is #{user.address}."
     puts "---"
-    user.github_account = prompt("Enter #{user.name}'s GitHub Username:")
-    puts "#{user.name}'s GitHub Username is #{user.github_account}."
+    user.github_account = prompt("Enter #{user.name.capitalize}'s GitHub Username:")
+    puts "#{user.name.capitalize}'s GitHub Username is #{user.github_account}."
     puts "---"
-    user.slack_account = prompt("Enter #{user.name}'s Slack Username:")
-    puts "#{user.name}'s Slack Username is #{user.slack_account}."
+    user.slack_account = prompt("Enter #{user.name.capitalize}'s Slack Username:")
+    puts "#{user.name.capitalize}'s Slack Username is #{user.slack_account}."
     puts "---"
-    puts "<<< SAVING #{user.name}'s Profile to the Database >>>"
+    puts "<<< SAVING #{user.name.capitalize}'s Profile to the Database >>>"
     return user
   end
 
@@ -128,7 +153,7 @@ loop do
   action = database.prompt("(A)dd User, (S)earch User, (D)elete User, (Q)uit.").downcase
   if action == "a"
     puts "+++ ADD USER +++"
-    name = database.prompt("Enter New User's Name:").capitalize
+    name = database.prompt("Enter New User's Name:").downcase
     if database.has_name_already?(name)
       puts "User already exists!"
     else
