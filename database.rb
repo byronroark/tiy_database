@@ -7,10 +7,11 @@ require_relative 'employee'
 
 class Database
   def initialize
+    # preloaded students and employees for testing
     byron = Student.new
     byron.name = "byron"
     byron.cohort = "Fall 2015"
-    byron.graduated = "no"
+    byron.graduated = "pending"
     byron.phone_number = "352-281-7726"
     byron.address = "410 S Armenia Ave"
     byron.github_account = "byronroark"
@@ -18,14 +19,37 @@ class Database
 
     sanam = Student.new
     sanam.name = "sanam"
+    byron.cohort = "Fall 2015"
+    byron.graduated = "pending"
+    byron.phone_number = "555-222-1212"
+    byron.address = "410 S Armenia Ave"
+    byron.github_account = "sanamakbar"
+    byron.slack_account = "sanamakbar"
 
     gavin = Employee.new
     gavin.name = "gavin"
+    gavin.position = "Rails Instructor"
+    gavin.salary = "100_000"
+    gavin.date_hired = "01-01-2014"
+    gavin.tenure = ""
+    gavin.phone_number = "555-212-2121"
+    gavin.address = "123 Anywhere St"
+    gavin.github_account = "gstark"
+    gavin.slack_account = "gavinstark"
 
     jason = Employee.new
     jason.name = "jason"
+    jason.position = "Front-end Instructor"
+    jason.salary = "99_000"
+    jason.date_hired = "08-01-2013"
+    jason.tenure = ""
+    jason.phone_number = "555-333-2222"
+    jason.address = "123 Anywhere St"
+    jason.github_account = "ambresia"
+    jason.slack_account = "jason"
 
     @users = [byron, sanam, gavin, jason]
+    # enable this empty array
     # @users = []
   end
 
@@ -110,6 +134,7 @@ class Database
     puts "---"
     user.date_hired = prompt("Enter the Date that #{user.name.capitalize} was hired (MM-DD-YYYY):")
     puts "#{user.name.capitalize} was hired on #{user.date_hired}."
+    puts "#{user.name.capitalize} has worked at Iron Yard for #{user.tenure} years."
     puts "---"
     raw_number = prompt("Enter #{user.name.capitalize}'s Phone Number, starting with Area Code:")
     user.phone_number = PhoneNumberParser.formatted(raw_number)
@@ -137,7 +162,6 @@ class Database
     else
       puts "That action is invalid! Please enter a valid action."
     end
-    p @users
   end
 
   def has_name_already?(name)

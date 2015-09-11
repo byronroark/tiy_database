@@ -14,4 +14,8 @@ class Employee < UserInfo
     # the *SAME* employee many times
     @formatted_date_hired ||= date_hired.strftime('%m-%d-%Y')
   end
+
+  def tenure
+    @tenure = ((Date.today - date_hired).to_f/365).round
+  end
 end
