@@ -53,8 +53,12 @@ class Database
     # @users = []
   end
 
+  def find_user_by_name(name)
+    @users.find { |user| user.name.include?(name) }
+  end
+
   def search_user(name)
-    user = @users.find { |user| /#{name}/ =~ user.name }
+    user = find_user_by_name(name)
     if user.is_a?(Student)
       puts "Name: #{user.name.capitalize}\nRole: #{Student}\nCohort: #{user.cohort}\nGraduated?: #{user.graduated}\nPhone: #{user.phone_number}\nAddress: #{user.address}\nGithub: #{user.github_account}\nSlack: #{user.slack_account}"
       puts "---"
@@ -67,7 +71,7 @@ class Database
   end
 
   def delete_user(name)
-    user = @users.find { |user| user.name.include?(name) }
+    user = find_user_by_name(name)
     if user
       puts "!!! REMOVED #{user.name.capitalize} from the Database !!!"
       @users.delete(user)
@@ -163,10 +167,6 @@ class Database
       puts "That action is invalid! Please enter a valid action."
     end
   end
-
-  def has_name_already?(name)
-    @users.find { |user| user.name.include?(name)}
-  end
 end
 
 database = Database.new
@@ -178,7 +178,7 @@ loop do
   if action == "a"
     puts "+++ ADD USER +++"
     name = database.prompt("Enter New User's Name:").downcase
-    if database.has_name_already?(name)
+    if database.find_user_by_name(name)
       puts "User already exists!"
     else
       database.add_user(name)
