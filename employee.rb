@@ -1,6 +1,7 @@
 class Employee < UserInfo
   attr_accessor :salary,
-                :position
+                :position,
+                :tenure
 
   attr_reader :date_hired
 
