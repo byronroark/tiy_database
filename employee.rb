@@ -14,4 +14,16 @@ class Employee < UserInfo
     # the *SAME* employee many times
     @formatted_date_hired ||= date_hired.strftime('%m-%d-%Y')
   end
+
+  def show
+    puts %{Name: #{name.capitalize}
+Role: #{self.class}
+Position: #{position}
+Salary: #{salary}
+Phone: #{phone_number}
+Address: #{address}
+Github: #{github_account}
+Slack: #{slack_account}
+---}
+  end
 end

@@ -35,14 +35,8 @@ class Database
 
   def search_user(name)
     user = find_user_by_name(name)
-    if user.is_a?(Student)
-      puts "Name: #{user.name.capitalize}\nRole: #{Student}\nCohort: #{user.cohort}\nGraduated?: #{user.graduated}\nPhone: #{user.phone_number}\nAddress: #{user.address}\nGithub: #{user.github_account}\nSlack: #{user.slack_account}"
-      puts "---"
-    elsif user.is_a?(Employee)
-      puts "Name: #{user.name.capitalize}\nRole: #{Employee}\nPosition: #{user.position}\nSalary: #{user.salary}\nPhone: #{user.phone_number}\nAddress: #{user.address}\nGithub: #{user.github_account}\nSlack: #{user.slack_account}"
-      puts "---"
-    else
-      puts "No match found for #{name}."
+    if user
+      user.show
     end
   end
 
