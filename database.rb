@@ -63,11 +63,11 @@ class Database
     user.cohort = prompt("Enter #{user.name.capitalize}'s Cohort:")
     puts "#{user.name.capitalize}'s belongs to TIY #{user.cohort} Cohort."
     puts "---"
-    graduated = prompt("Has #{user.name.capitalize} Graduated? (Y)es or (N)ot yet").downcase
+    graduated = prompt("Has #{user.name.capitalize} Graduated yet? (Y)es or (N)o.").downcase
     if graduated == "y"
       user.graduated = "yes"
     elsif graduated == "n"
-      user.graduated = "no"
+      user.graduated = "pending"
     else
       puts "Invalid choice. Please enter (y)es or (n)o"
     end
