@@ -19,4 +19,17 @@ class Employee < UserInfo
   def tenure
     @tenure = ((Date.today - date_hired).to_f/365).round
   end
+
+  def show
+    puts %{
+      Name: #{name.capitalize}
+      Role: #{self.class}
+      Position: #{position}
+      Salary: #{salary}
+      Phone: #{phone_number}
+      Address: #{address}
+      Github: #{github_account}
+      Slack: #{slack_account}
+    }
+  end
 end
