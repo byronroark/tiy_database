@@ -54,13 +54,15 @@ class Database
   end
 
   def find_user_by_name(name)
-    @users.find { |user| user.name.include?(name) }
+    @users.find { |user| /#{name}/ =~ user.name }
   end
 
   def search_user(name)
     user = find_user_by_name(name)
     if user
       user.show
+    elsif user.nil?
+      puts "No match for \"#{name.capitalize}\" in the Database."
     end
   end
 
@@ -176,12 +178,12 @@ loop do
       puts "User already exists!"
     else
       database.add_user(name)
-      puts "#{name} added to the Database."
+      puts "\"#{name}\" added to the Database."
     end
   elsif action == "s"
     puts ">>> SEARCH USERS <<<"
     name = database.prompt("Enter the User's Name you want to SEARCH from Database:")
-    puts "Search results for #{name}..."
+    puts "Search results for \"#{name}\"..."
     database.search_user(name)
   elsif action == "d"
     puts "--- DELETE USER ---"
